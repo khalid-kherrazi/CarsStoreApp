@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {RestApiService} from "../rest-api.service";
+import {AuthenticationServiceService} from "../authentication-service.service";
 
 @Component({
   selector: 'app-login-component',
@@ -7,9 +9,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponentComponent implements OnInit {
 
-  constructor() { }
+  model: any = {};
+  loading = false;
+
+  constructor(private authenticationService: AuthenticationServiceService) {}
 
   ngOnInit() {
+    this.authenticationService.logout();
+  }
+
+  onLogin() {
+    this.loading = true;
+    this.authenticationService.login(this.model.username, this.model.password)
+      .then( data => {
+        this.loading = false;
+      })
+      .catch(eerror => {
+        this.loading = false;
+      });
+
   }
 
 }
